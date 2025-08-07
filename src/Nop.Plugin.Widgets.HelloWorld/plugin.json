@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Misc",
+  "FriendlyName": "hello Phuong",
+  "SystemName": "Misc.helloWorld",
+  "Version": "4.70.1",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "nopCommerce team",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Misc.HelloWorld.dll",
+  "Description": "Phuong helper"
+}
