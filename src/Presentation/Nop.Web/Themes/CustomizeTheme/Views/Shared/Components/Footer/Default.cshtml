@@ -1,0 +1,38 @@
+﻿@model FooterModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Domain.Topics
+
+@inject IWorkContext workContext
+
+<footer class="custom-footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h4>Về chúng tôi</h4>
+            <p>Chúng tôi cung cấp sản phẩm chất lượng với dịch vụ chuyên nghiệp.</p>
+        </div>
+
+        <div class="footer-section">
+            <h4>Liên kết nhanh</h4>
+            <ul>
+                <li><a href="/about-us">Giới thiệu</a></li>
+                <li><a href="/contact">Liên hệ</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/faq">FAQ</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Theo dõi chúng tôi</h4>
+            <div class="social-icons">
+                <a href="#"><img src="/images/facebook.svg" alt="Facebook" /></a>
+                <a href="#"><img src="/images/youtube.svg" alt="YouTube" /></a>
+                <a href="#"><img src="/images/instagram.svg" alt="Instagram" /></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Công ty của bạn. Đã đăng ký bản quyền.</p>
+    </div>
+</footer>

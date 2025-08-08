@@ -1,0 +1,34 @@
+﻿@using Nop.Services.Localization
+@using Nop.Core
+@inject ILocalizationService localizationService
+@inject IStoreContext storeContext
+
+@{
+    Layout = "_ColumnsOne";
+
+    var homepageTitle = await localizationService.GetLocalizedAsync(await storeContext.GetCurrentStoreAsync(), s => s.HomepageTitle);
+
+    //title
+    if (!string.IsNullOrEmpty(homepageTitle))
+    {
+        NopHtml.AddTitleParts(homepageTitle);
+    }
+
+    var homepageDescription = await localizationService.GetLocalizedAsync(await storeContext.GetCurrentStoreAsync(), s => s.HomepageDescription);
+
+    //meta
+    if (!string.IsNullOrEmpty(homepageDescription))
+    {
+        NopHtml.AddMetaDescriptionParts(homepageDescription);
+    }
+
+    //page class
+    NopHtml.AppendPageCssClassParts("html-home-page");
+}
+<div class="page home-page">
+    <div class="page-body hehe">
+        <h1>Tổng quan Viettel Post – Đơn vị chuyển phát nhanh hàng đầu</h1>
+        <p><strong>Viettel Post là đơn vị thành viên của Tập đoàn Công nghiệp Viễn thông Quân đội Viettel, đây là một hệ sinh thái chuyên kinh doanh đa dịch vụ chuyển phát.</strong></p>
+        <img src="~/images/viettelpost-1.jpg"/>
+    </div>
+</div>

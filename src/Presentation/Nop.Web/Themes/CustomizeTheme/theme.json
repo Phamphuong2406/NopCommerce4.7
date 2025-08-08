@@ -1,0 +1,7 @@
+﻿{
+  "SystemName": "CustomizeTheme", // Tên hệ thống (dùng nội bộ bởi NopCommerce)
+  "FriendlyName": "Customize Theme", // Tên hiển thị trên giao diện quản trị
+  "SupportRTL": true, // Có hỗ trợ hiển thị phải sang trái (cho ngôn ngữ như tiếng Ả Rập không)
+  "PreviewImageUrl": "~/Themes/CustomizeTheme/preview.jpg", // Ảnh xem trước trong admin
+  "PreviewText": "The 'CustomizeTheme' cuatui" // Mô tả ngắn cho theme
+}

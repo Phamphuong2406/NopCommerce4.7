@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Nop.Plugin.Widgets.HelloWorld3;
-public  class HelloWorldDefault
+public  class HelloWorld3Default
 {
-    public const string HELLO_WORLD_VIEW_COMPONENT_NAME = "Helllo World 3";
+    public const string HELLO_WORLD_VIEW_COMPONENT_NAME = "Hello World 3";
 }
