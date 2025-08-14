@@ -741,6 +741,7 @@ public partial class ProductModelFactory : IProductModelFactory
             warehouseId: searchModel.SearchWarehouseId,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
+            shortDescription : searchModel.SearchShortDescription,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize,
             overridePublished: overridePublished);
 

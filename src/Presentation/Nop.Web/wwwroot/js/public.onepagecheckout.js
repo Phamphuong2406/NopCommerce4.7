@@ -623,7 +623,6 @@ var PaymentMethod = {
 
     save: function () {
         if (Checkout.loadWaiting !== false) return;
-
         if (this.validate()) {
             Checkout.setLoadWaiting('payment-method');
             $.ajax({

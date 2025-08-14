@@ -649,7 +649,7 @@ public partial class CustomerService : ICustomerService
         if (clearRewardPoints)
             await _genericAttributeService.SaveAttributeAsync(customer, NopCustomerDefaults.UseRewardPointsDuringCheckoutAttribute, false, storeId);
 
-        //clear selected shipping method
+        //xóa phương thức vận chuyển đã chọn
         if (clearShippingMethod)
         {
             await _genericAttributeService.SaveAttributeAsync<ShippingOption>(customer, NopCustomerDefaults.SelectedShippingOptionAttribute, null, storeId);

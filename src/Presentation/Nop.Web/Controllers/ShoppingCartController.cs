@@ -300,7 +300,7 @@ public partial class ShoppingCartController : BasePublicController
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        if (updatecartitem == null)
+        if (updatecartitem == null)//sản phẩm chưa có trong giỏ hàng
         {
             //add to the cart
             addToCartWarnings.AddRange(await _shoppingCartService.AddToCartAsync(customer,
@@ -311,23 +311,24 @@ public partial class ShoppingCartController : BasePublicController
         else
         {
             var cart = await _shoppingCartService.GetShoppingCartAsync(customer, updatecartitem.ShoppingCartType, store.Id);
-
+            //Kiểm tra xem trong giỏ hàng có một item khác giống hệt thông tin (cùng sản phẩm, thuộc tính, giá, ngày thuê…) hay không.
             var otherCartItemWithSameParameters = await _shoppingCartService.FindShoppingCartItemInTheCartAsync(
                 cart, updatecartitem.ShoppingCartType, product, attributes, customerEnteredPriceConverted,
                 rentalStartDate, rentalEndDate);
             if (otherCartItemWithSameParameters != null &&
                 otherCartItemWithSameParameters.Id == updatecartitem.Id)
             {
-                //ensure it's some other shopping cart item
+                //tìm thấy thì chings là caapju nhật =-> bỏ qua
                 otherCartItemWithSameParameters = null;
             }
-            //update existing item
+            //update existing item.Nếu có một item khác giống hệt (otherCartItemWithSameParameters), cộng gộp số lượng của nó vào item hiện tại.
             addToCartWarnings.AddRange(await _shoppingCartService.UpdateShoppingCartItemAsync(customer,
                 updatecartitem.Id, attributes, customerEnteredPriceConverted,
                 rentalStartDate, rentalEndDate, quantity + (otherCartItemWithSameParameters?.Quantity ?? 0), true));
             if (otherCartItemWithSameParameters != null && !addToCartWarnings.Any())
             {
                 //delete the same shopping cart item (the other one)
+                //Nếu có một item khác giống hệt và không có cảnh báo → xoá item trùng lặp đó để gộp thành một item duy nhất.
                 await _shoppingCartService.DeleteShoppingCartItemAsync(otherCartItemWithSameParameters);
             }
         }
@@ -375,7 +376,7 @@ public partial class ShoppingCartController : BasePublicController
                     shoppingCarts.Sum(item => item.Quantity));
 
                 return Json(new
-                {
+                {//Cập nhật số lượng hiển thị ở header và trả về JSON thông báo thêm thành công.
                     success = true,
                     message = string.Format(
                         await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheWishlist.Link"),
@@ -396,7 +397,7 @@ public partial class ShoppingCartController : BasePublicController
                     //redirect to the shopping cart page
                     return Json(new
                     {
-                        redirect = Url.RouteUrl("ShoppingCart")
+                        redirect = Url.RouteUrl("ShoppingCart")//Nếu setting DisplayCartAfterAddingProduct = true → trả về JSON redirect sang giỏ hàng.
                     });
                 }
 
@@ -405,9 +406,9 @@ public partial class ShoppingCartController : BasePublicController
 
                 var updateTopCartSectionHtml = string.Format(
                     await _localizationService.GetResourceAsync("ShoppingCart.HeaderQuantity"),
-                    shoppingCarts.Sum(item => item.Quantity));
+                    shoppingCarts.Sum(item => item.Quantity));//Cập nhật số lượng hiển thị ở header (mini cart)
 
-                var updateFlyoutCartSectionHtml = _shoppingCartSettings.MiniShoppingCartEnabled
+                    var updateFlyoutCartSectionHtml = _shoppingCartSettings.MiniShoppingCartEnabled
                     ? await RenderViewComponentToStringAsync(typeof(FlyoutShoppingCartViewComponent))
                     : string.Empty;
 
@@ -415,7 +416,7 @@ public partial class ShoppingCartController : BasePublicController
                 {
                     success = true,
                     message = string.Format(await _localizationService.GetResourceAsync("Products.ProductHasBeenAddedToTheCart.Link"),
-                        Url.RouteUrl("ShoppingCart")),
+                        Url.RouteUrl("ShoppingCart")),//Trả về JSON thông báo thành công kèm HTML cập nhật cho UI.
                     updatetopcartsectionhtml = updateTopCartSectionHtml,
                     updateflyoutcartsectionhtml = updateFlyoutCartSectionHtml
                 });
@@ -696,7 +697,7 @@ public partial class ShoppingCartController : BasePublicController
     [HttpPost]
     public virtual async Task<IActionResult> AddProductToCart_Details(int productId, int shoppingCartTypeId, IFormCollection form)
     {
-        var product = await _productService.GetProductByIdAsync(productId);
+        var product = await _productService.GetProductByIdAsync(productId);// tìm sp theo id
         if (product == null)
         {
             return Json(new
@@ -715,7 +716,7 @@ public partial class ShoppingCartController : BasePublicController
             });
         }
 
-        //update existing shopping cart item
+        //cập nhật mặt hàng giỏ hàng hiện có
         var updatecartitemid = 0;
         foreach (var formKey in form.Keys)
             if (formKey.Equals($"addtocart_{productId}.UpdatedShoppingCartItemId", StringComparison.InvariantCultureIgnoreCase))
@@ -732,7 +733,7 @@ public partial class ShoppingCartController : BasePublicController
             var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), (ShoppingCartType)shoppingCartTypeId, store.Id);
 
             updatecartitem = cart.FirstOrDefault(x => x.Id == updatecartitemid);
-            //not found? let's ignore it. in this case we'll add a new item
+            //Không tìm thấy? Hãy bỏ qua. Trong trường hợp này, chúng ta sẽ thêm một mặt hàng mới.
             //if (updatecartitem == null)
             //{
             //    return Json(new
@@ -747,7 +748,7 @@ public partial class ShoppingCartController : BasePublicController
                 return Json(new
                 {
                     success = false,
-                    message = "This product does not match a passed shopping cart item identifier"
+                    message = "This product does not match a passed shopping cart item identifier"//Sản phẩm này không khớp với mã định danh mục sản phẩm trong giỏ hàng đã qua
                 });
             }
         }
@@ -1251,7 +1252,7 @@ public partial class ShoppingCartController : BasePublicController
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
-        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+        var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);//Lấy giỏ hàng từ DB
 
         //parse and save checkout attributes
         await ParseAndSaveCheckoutAttributesAsync(cart, form);
@@ -1267,11 +1268,11 @@ public partial class ShoppingCartController : BasePublicController
             model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart, validateCheckoutAttributes: true);
             return View(model);
         }
-
+        //Xác định xem khách vãng lai (chưa login) có được phép checkout hay không.
         var anonymousPermissed = _orderSettings.AnonymousCheckoutAllowed
                                  && _customerSettings.UserRegistrationType == UserRegistrationType.Disabled;
-
-        if (anonymousPermissed || !await _customerService.IsGuestAsync(customer))
+        //nếu đã đăng nhập
+        if (anonymousPermissed || !await _customerService.IsGuestAsync(customer))//đã login
             return RedirectToRoute("Checkout");
 
         var cartProductIds = cart.Select(ci => ci.ProductId).ToArray();

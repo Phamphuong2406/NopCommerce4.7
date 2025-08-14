@@ -1,13 +1,13 @@
 ﻿@model ProductDetailsModel.AddToCartModel
 @using Nop.Core.Domain.Orders
 @if (Model.UpdatedShoppingCartItemId > 0)
-{
+{//Nếu đang chỉnh sửa sản phẩm đã có trong giỏ hàng → gửi thêm hidden input để server biết cần cập nhật chứ không phải thêm mới
     <input asp-for="UpdatedShoppingCartItemId" type="hidden" />
 }
-@if (!Model.DisableBuyButton || Model.CustomerEntersPrice)
+@if (!Model.DisableBuyButton || Model.CustomerEntersPrice)//Chỉ hiển thị nếu nút mua không bị tắt
 {
     <div class="add-to-cart">
-        @if (Model.CustomerEntersPrice)
+        @if (Model.CustomerEntersPrice)//nếu khách hàng được nhạp giá thì hiển thị ô nhập giá
         {
             <div class="customer-entered-price">
                 <div class="price-input">
@@ -20,7 +20,7 @@
                 </div>
             </div>
         }
-        @if (!string.IsNullOrEmpty(Model.MinimumQuantityNotification))
+        @if (!string.IsNullOrEmpty(Model.MinimumQuantityNotification))// thông báo số lượng tối thiểu
         {
             <div class="min-qty-notification">@Model.MinimumQuantityNotification</div>
         }

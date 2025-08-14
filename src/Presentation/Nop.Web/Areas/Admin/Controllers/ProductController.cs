@@ -795,7 +795,7 @@ public partial class ProductController : BaseAdminController
     {
         return RedirectToAction("List");
     }
-
+    //Day
     public virtual async Task<IActionResult> List()
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))

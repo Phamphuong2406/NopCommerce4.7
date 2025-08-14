@@ -24,6 +24,7 @@ using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Models.Checkout;
 using Nop.Web.Models.Common;
+using Org.BouncyCastle.Asn1.Cms;
 using ILogger = Nop.Services.Logging.ILogger;
 
 namespace Nop.Web.Controllers;
@@ -328,9 +329,9 @@ public partial class CheckoutController : BasePublicController
         var cartProductIds = cart.Select(ci => ci.ProductId).ToArray();
         var downloadableProductsRequireRegistration =
             _customerSettings.RequireRegistrationForDownloadableProducts && await _productService.HasAnyDownloadableProductAsync(cartProductIds);
-
+        
         if (await _customerService.IsGuestAsync(customer) && (!_orderSettings.AnonymousCheckoutAllowed || downloadableProductsRequireRegistration))
-            return Challenge();
+            return Challenge();//ép đăng ký
 
         //if we have only "button" payment methods available (displayed on the shopping cart page, not during checkout),
         //then we should allow standard checkout
@@ -350,7 +351,7 @@ public partial class CheckoutController : BasePublicController
             return RedirectToRoute("ShoppingCart");
 
         //reset checkout data
-        await _customerService.ResetCheckoutDataAsync(customer, store.Id);
+        await _customerService.ResetCheckoutDataAsync(customer, store.Id);//Xoá dữ liệu tạm của lần checkout trước (địa chỉ, lựa chọn shipping, payment…).
 
         //validation (cart)
         var checkoutAttributesXml = await _genericAttributeService.GetAttributeAsync<string>(customer,
@@ -359,6 +360,9 @@ public partial class CheckoutController : BasePublicController
         if (scWarnings.Any())
             return RedirectToRoute("ShoppingCart");
         //validation (each shopping cart item)
+        //ểm tra các lỗi liên quan đến checkout attributes hoặc từng sản phẩm(ví dụ hết hàng, số lượng tối thiểu, điều kiện mua…).
+
+//Nếu có lỗi → quay lại giỏ hàng.
         foreach (var sci in cart)
         {
             var product = await _productService.GetProductByIdAsync(sci.ProductId);

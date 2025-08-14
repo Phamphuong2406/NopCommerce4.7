@@ -30,6 +30,8 @@ public partial record ProductSearchModel : BaseSearchModel
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductName")]
     public string SearchProductName { get; set; }
+    [NopResourceDisplayName("Admin.Catalog.Products.List.SearchShortDescription")]
+    public string SearchShortDescription { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchCategory")]
     public int SearchCategoryId { get; set; }

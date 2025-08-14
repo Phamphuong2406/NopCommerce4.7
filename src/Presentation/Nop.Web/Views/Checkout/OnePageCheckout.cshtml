@@ -16,12 +16,12 @@
 }
 @{
     //step numbers
-    var billingAddressStepNumber = 1;
-    var shippingAddressStepNumber = 2;
-    var shippingMethodStepNumber = 3;
-    var paymentMethodStepNumber = 4;
-    var paymentInfoStepNumber = 5;
-    var confirmOrderStepNumber = 6;
+    var billingAddressStepNumber = 1;// địa chỉ thanh toán
+    var shippingAddressStepNumber = 2;// địa chỉ giao hàng
+    var shippingMethodStepNumber = 3;//Phương thức giao hàng
+    var paymentMethodStepNumber = 4;// phương thức thanh toán
+    var paymentInfoStepNumber = 5;// thông tin thanh toán
+    var confirmOrderStepNumber = 6;// xác nhận đơn hàng
     if (!Model.ShippingRequired)
     {
         paymentMethodStepNumber = paymentMethodStepNumber - 2;

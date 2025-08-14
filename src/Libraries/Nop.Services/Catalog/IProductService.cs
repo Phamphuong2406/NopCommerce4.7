@@ -166,6 +166,7 @@ public partial interface IProductService
         decimal? priceMax = null,
         int productTagId = 0,
         string keywords = null,
+        string shortDescription = null,
         bool searchDescriptions = false,
         bool searchManufacturerPartNumber = true,
         bool searchSku = true,
