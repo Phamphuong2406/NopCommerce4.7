@@ -1,0 +1,21 @@
+﻿@model Nop.Plugin.Payments.Transfer.BankTransferPaymentSettings
+
+<form asp-controller="BankTransfer" asp-action="Configure" method="post">
+    <div>
+        <label>Ngân hàng:</label>
+        <input asp-for="BankName" />
+    </div>
+    <div>
+        <label>Số tài khoản:</label>
+        <input asp-for="AccountNumber" />
+    </div>
+    <div>
+        <label>Chủ tài khoản:</label>
+        <input asp-for="AccountHolder" />
+    </div>
+    <div>
+        <label>Hướng dẫn:</label>
+        <textarea asp-for="Instructions"></textarea>
+    </div>
+    <button type="submit">Lưu cấu hình</button>
+</form>

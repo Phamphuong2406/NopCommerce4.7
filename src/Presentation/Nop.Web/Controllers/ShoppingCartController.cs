@@ -318,7 +318,7 @@ public partial class ShoppingCartController : BasePublicController
             if (otherCartItemWithSameParameters != null &&
                 otherCartItemWithSameParameters.Id == updatecartitem.Id)
             {
-                //tìm thấy thì chings là caapju nhật =-> bỏ qua
+                //tìm thấy thì chings là cập nhật =-> bỏ qua
                 otherCartItemWithSameParameters = null;
             }
             //update existing item.Nếu có một item khác giống hệt (otherCartItemWithSameParameters), cộng gộp số lượng của nó vào item hiện tại.
